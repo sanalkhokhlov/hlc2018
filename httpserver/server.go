@@ -1,13 +1,11 @@
 package httpserver
 
 import (
-	"bitbucket.org/sLn/hlc2018/store"
-	"bytes"
 	"fmt"
 	"log"
 	"strings"
 
-	"bitbucket.org/sLn/hlc2018/store/service"
+	"github.com/sanalkhokhlov/hlc2018/store/service"
 	"github.com/valyala/fasthttp"
 )
 
@@ -18,6 +16,7 @@ type Server struct {
 func (s *Server) fastHTTPHandler(ctx *fasthttp.RequestCtx) {
 	uri := string(ctx.RequestURI())
 	parts := strings.Split(uri, "/")
+	ctx.SetContentType("application/json")
 
 	switch string(ctx.Method()) {
 	case "GET":
@@ -26,56 +25,46 @@ func (s *Server) fastHTTPHandler(ctx *fasthttp.RequestCtx) {
 			s.filterHandler(ctx)
 			return
 		case "group":
-			log.Println("group")
+			// log.Println("group")
+			ctx.Write([]byte(`{"groups": []}`))
+			ctx.SetStatusCode(fasthttp.StatusOK)
+			return
 		default:
 			switch parts[3] {
 			case "recommend":
-				log.Println("recommend")
-				break
+				// log.Println("recommend")
+				ctx.Write([]byte(`{"accounts": []}`))
+				ctx.SetStatusCode(fasthttp.StatusOK)
+				return
 			case "suggest":
-				log.Println("suggest")
-				break
+				// log.Println("suggest")
+				ctx.Write([]byte(`{"accounts": []}`))
+				ctx.SetStatusCode(fasthttp.StatusOK)
+				return
 			default:
 				ctx.SetStatusCode(fasthttp.StatusNotFound)
 				return
 			}
 		}
-		break
 	case "POST":
 		switch parts[2] {
 		case "new":
-			log.Println("new")
-			break
+			// log.Println("new")
+			ctx.SetStatusCode(fasthttp.StatusCreated)
+			ctx.Write([]byte(`{}`))
+			return
 		case "likes":
-			log.Println("likes")
-			break
+			// log.Println("likes")
+			ctx.SetStatusCode(fasthttp.StatusAccepted)
+			ctx.Write([]byte(`{}`))
+			return
 		default:
-			log.Println("update")
-			break
+			// log.Println("update")
+			ctx.SetStatusCode(fasthttp.StatusAccepted)
+			ctx.Write([]byte(`{}`))
+			return
 		}
 	}
-}
-
-func (ds *Server) ParseFilters(query []byte) (args store.FilterArgs, error) {
-	badRequestError := &store.BadRequestError{}
-	pairs := bytes.Split(query, []byte("&"))
-	args = store.FilterArgs{}
-
-	for _, p := range pairs {
-		pair := bytes.Split(p, []byte("="))
-
-		if len(pair) < 2 {
-			return args, badRequestError
-		}
-
-		if len(pair[1]) == 0 {
-			return args, badRequestError
-		}
-
-		args = append(args, pair)
-	}
-
-	return args, nil
 }
 
 func (s *Server) ErrorBadRequest(ctx *fasthttp.RequestCtx) {

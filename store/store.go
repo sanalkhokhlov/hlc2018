@@ -1,23 +1,23 @@
 package store
 
 type Account struct {
-	ID        uint32   `json:"id"`
-	Fname     string   `json:"fname"`
-	Sname     string   `json:"sname"`
-	Email     string   `json:"email" valid:"email"`
-	Interests []string `json:"interests"`
-	Status    string   `json:"status" valid:"required"`
-	Premium   struct {
-		Start  uint64 `json:"start"`
-		Finish uint64 `json:"finish"`
-	} `json:"premium"`
-	Sex     string `json:"sex" valid:"sex,required"`
-	Phone   string `json:"phone"`
-	Likes   []Like `json:"likes"`
-	Birth   uint64 `json:"birth" valid:"required"`
-	City    string `json:"city"`
-	Country string `json:"country"`
-	Joined  uint64 `json:"joined" valid:"required"`
+	ID    uint32 `json:"id"`
+	Fname string `json:"fname,omitempty"`
+	Sname string `json:"sname,omitempty"`
+	Email string `json:"email" valid:"email"`
+	// Interests []string `json:"interests,omitempty"`
+	Status string `json:"status,omitempty"`
+	// Premium   *struct {
+	// 	Start  uint64 `json:"start,omitempty"`
+	// 	Finish uint64 `json:"finish,omitempty"`
+	// } `json:"premium,omitempty"`
+	Sex string `json:"sex,omitempty"`
+	// Phone   string `json:"phone,omitempty"`
+	// Likes   []Like `json:"likes,omitempty"`
+	// Birth   uint64 `json:"birth,omitempty"`
+	City    string `json:"city,omitempty"`
+	Country string `json:"country,omitempty"`
+	// Joined  uint64 `json:"joined,omitempty"`
 }
 
 type Like struct {
@@ -45,5 +45,5 @@ func (e *BadRequestError) Error() string {
 
 type FilterArgs struct {
 	Limit int
-	Pairs [][][]byte
+	Parts [][][]byte
 }

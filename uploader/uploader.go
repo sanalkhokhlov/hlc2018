@@ -9,8 +9,8 @@ import (
 	"os"
 	"runtime"
 
-	"bitbucket.org/sLn/hlc2018/store"
-	"bitbucket.org/sLn/hlc2018/store/service"
+	"github.com/sanalkhokhlov/hlc2018/store"
+	"github.com/sanalkhokhlov/hlc2018/store/service"
 )
 
 func Upload(dirPath string, ds *service.DataStore) error {

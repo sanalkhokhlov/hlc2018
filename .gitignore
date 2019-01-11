@@ -1,4 +1,6 @@
 *.zip
 *.exe
 .idea
+.vscode
 data
+*.test
